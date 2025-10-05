@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-
-
 import 'package:model_home_app/constant/app_color.dart';
+
+
 import 'package:model_home_app/constant/app_image.dart';
 import 'package:model_home_app/controller/auth_controller.dart';
 import 'package:model_home_app/widgets/button/custom_button.dart';
 import 'package:model_home_app/widgets/button/social_button.dart';
+
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -65,7 +64,7 @@ SocialButton(
   color: AppColor.textcolor,
   textColor: Colors.black,
   iconColor: Colors.red,
-  onPressed: () => authController.signInWithGoogle(),
+   onPressed: () => authController.signInWithGoogle(),
 ),
        SizedBox(height: screenHeight*0.02),
   SocialButton(
@@ -74,7 +73,7 @@ SocialButton(
   color: AppColor.textcolor,
   textColor: Colors.black,
   iconColor: Colors.black,
-  onPressed: () => authController.signInWithApple(),
+ onPressed: () => authController.signInWithApple(),
 ),
            
   ],
