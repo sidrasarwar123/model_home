@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 
 import 'package:model_home_app/constant/app_color.dart';
 import 'package:model_home_app/constant/app_image.dart';
+import 'package:model_home_app/controller/auth_controller.dart';
 import 'package:model_home_app/widgets/button/custom_button.dart';
 import 'package:model_home_app/widgets/button/social_button.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +59,24 @@ class WelcomeScreen extends StatelessWidget {
       iconColor: Colors.blue, 
     ),
      SizedBox(height: screenHeight*0.02),
-    SocialButton(
-      icon: Icons.g_mobiledata, 
-      text: "Continue with Google",
-      color: AppColor.textcolor,
-      textColor: Colors.black,
-      iconColor: Colors.red, 
-    ),
+SocialButton(
+  icon: Icons.g_mobiledata,
+  text: "Continue with Google",
+  color: AppColor.textcolor,
+  textColor: Colors.black,
+  iconColor: Colors.red,
+  onPressed: () => authController.signInWithGoogle(),
+),
        SizedBox(height: screenHeight*0.02),
-    SocialButton(
-      icon: Icons.apple,
-      text: "Continue with Apple",
-      color: AppColor.textcolor,
-      textColor: Colors.black,
-      iconColor: Colors.black, 
-    ),
+  SocialButton(
+  icon: Icons.apple,
+  text: "Continue with Apple",
+  color: AppColor.textcolor,
+  textColor: Colors.black,
+  iconColor: Colors.black,
+  onPressed: () => authController.signInWithApple(),
+),
+           
   ],
 ),
 
