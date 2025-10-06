@@ -13,27 +13,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
+@override
+void initState() {
+  super.initState();
 
-    Timer(const Duration(seconds: 3), () {
-      final box = GetStorage();
+  // 3 second ke liye splash screen dikhao
+  Timer(const Duration(seconds: 3), () {
+    final box = GetStorage();  // local storage ka instance
 
-      // 👇 add default value if null
-      final isOnboardingPlayed = box.read('isOnboardingPlayed') ?? false;
+    // Check karo ke user ne onboarding complete kiya ya nahi
+    final isOnboardingPlayed = box.read('isOnboardingPlayed') ?? false;
 
-      User? user = FirebaseAuth.instance.currentUser;
+    // FirebaseAuth se current user check karo
+    User? user = FirebaseAuth.instance.currentUser;
 
-      if (!isOnboardingPlayed) {
-        Get.offAllNamed('/onboarding');
-      } else if (user != null) {
-        Get.offAllNamed("/bottombar");
-      } else {
-        Get.offAllNamed('/welcomescreen');
-      }
-    });
-  }
+    if (!isOnboardingPlayed) {
+      // Agar first time hai → Onboarding dikhao
+      Get.offAllNamed('/onboarding');
+    } else if (user != null) {
+      // Agar onboarding complete ho chuki aur user login hai → Home dikhao
+      Get.offAllNamed("/bottombar");
+    } else {
+      // Agar onboarding complete ho chuki lekin user login nahi hai → Welcome/Login dikhao
+      Get.offAllNamed('/welcomescreen');
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {

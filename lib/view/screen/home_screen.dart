@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     ProductCard(
                       title: "Yellow Armchair",
-                      image: AppImage.chair5,
+                      image: AppImage.chair3,
                       price: "150",
                       onTap: () {
                             Get.toNamed("/productscreen");
