@@ -13,32 +13,34 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-@override
-void initState() {
-  super.initState();
+  final box = GetStorage();
 
-  // 3 second ke liye splash screen dikhao
-  Timer(const Duration(seconds: 3), () {
-    final box = GetStorage();  // local storage ka instance
+  @override
+  void initState() {
+    super.initState();
+    checkUserStatus();
+  }
 
-    // Check karo ke user ne onboarding complete kiya ya nahi
-    final isOnboardingPlayed = box.read('isOnboardingPlayed') ?? false;
+  void checkUserStatus() async {
+    await Future.delayed(const Duration(seconds: 2)); // splash delay
 
-    // FirebaseAuth se current user check karo
-    User? user = FirebaseAuth.instance.currentUser;
+    final isFirstTime = box.read("isFirstTime") ?? true;
+    final user = FirebaseAuth.instance.currentUser;
 
-    if (!isOnboardingPlayed) {
-      // Agar first time hai → Onboarding dikhao
+    if (isFirstTime) {
+      box.write("isFirstTime", false); // ek dafa onboarding dikhani ha
       Get.offAllNamed('/onboarding');
-    } else if (user != null) {
-      // Agar onboarding complete ho chuki aur user login hai → Home dikhao
-      Get.offAllNamed("/bottombar");
-    } else {
-      // Agar onboarding complete ho chuki lekin user login nahi hai → Welcome/Login dikhao
-      Get.offAllNamed('/welcomescreen');
+      return;
     }
-  });
-}
+
+    if (user == null) {
+      // agar user login nahi ha
+      Get.offAllNamed('/welcomescreen');
+    } else {
+      // agar user login ha to home screen par bhej do
+      Get.offAllNamed('/bottombar');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ void initState() {
           "Splash Screen",
           style: TextStyle(
             color: AppColor.buttoncolor,
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),

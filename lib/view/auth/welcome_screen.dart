@@ -17,6 +17,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+    bool isLoading = false;
   final AuthController authController = Get.put(AuthController());
 
   @override
@@ -91,9 +92,15 @@ SocialButton(
                 ],
               ),
             SizedBox(height: screenHeight*0.03),
-              CustomButton(text: "Sign in with Password", onPressed: (){
-                  Get.toNamed("/login");
-              }),
+              CustomButton(text: "Sign in with Password",
+               isloading: isLoading,
+          onPressed: () async {
+            setState(() => isLoading = true);
+            await Future.delayed(const Duration(seconds: 2));
+          setState(() => isLoading = false);
+            Get.toNamed("/login");
+          },
+              ),
 
                SizedBox(height: screenHeight*0.03),
 

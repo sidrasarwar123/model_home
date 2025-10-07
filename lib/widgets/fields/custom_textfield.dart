@@ -8,12 +8,14 @@ class CustomTextField extends StatefulWidget {
   final bool? readOnly;
   final TextEditingController? controller;
   final double? width;
+  final String? Function(String?)? validate;
 
   const CustomTextField({
     super.key,
     required this.hintText,
     this.prefixIcon,
     this.isPassword = false,
+    this.validate,
     this.keyboardType,
     this.readOnly,
     this.controller,
@@ -39,6 +41,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderRadius: BorderRadius.circular(40),
         ),
         child: TextFormField(
+          validator: widget.validate,
           controller: widget.controller,
           obscureText: widget.isPassword ? _obscureText : false,
           keyboardType: widget.keyboardType,

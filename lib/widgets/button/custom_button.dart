@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:model_home_app/constant/app_color.dart';
+import 'package:model_home_app/utilies/loading_utilies.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final bool? isloading;
 
   const CustomButton({
+       this.isloading=false,
     required this.text,
     required this.onPressed,
     Key? key,
@@ -28,7 +31,9 @@ class CustomButton extends StatelessWidget {
           ),
           padding: EdgeInsets.zero, 
         ),
-        child: Center(
+        child:isloading==true?
+        LoadingUtil.buttonLoading():
+         Center(
           child: Text(
             text,
             style: TextStyle(
