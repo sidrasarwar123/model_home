@@ -1,90 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:model_home_app/constant/app_image.dart';
-import 'package:model_home_app/widgets/cards/category_card.dart';
-import 'package:model_home_app/widgets/cards/product_card.dart';
+import 'package:model_home_app/controller/home_controller.dart';
+
+import '../../widgets/cards/category_card.dart';
+import '../../widgets/cards/product_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-       final screenHeight = MediaQuery.of(context).size.height;
-       
+    final HomeController controller = Get.put(HomeController());
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.menu)
-        ),
+        leading: IconButton(onPressed: () {
+
+        }, icon: const Icon(Icons.menu)),
         actions: [
-          TextButton.icon(onPressed: (){},icon: Icon(Icons.qr_code_scanner), label:Text("Scan") )
+          TextButton.icon(
+            onPressed: () {},
+            icon: const Icon(Icons.qr_code_scanner),
+            label: const Text("Scan"),
+          ),
         ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            
-              const Text("Browse by Categories",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-               SizedBox(height:screenHeight*0.03 ),
-              SizedBox(
-                height:screenHeight*0.3 ,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    CategoryCard(
-                      title: "Armchair",
-                      image: AppImage.chair1,
-                      productsCount: "100+ Product",
-                      onTap: () {
-                        Get.toNamed("/search");
-                      },
-                    ),
-                    CategoryCard(
-                      title: "Sofa",
-                      image: AppImage.sofa4,
-                      productsCount: "15+ Product",
-                      onTap: () {
-                            Get.toNamed("/search");
-                      },
-                    ),
-                  ],
-                ),
-              ),
-               SizedBox(height: screenHeight*0.04),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          else if( controller.categories.isEmpty){
+   return Center(child:Text("No Category found") );
+          }
 
-              const Text("Recommended for You",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: screenHeight*0.02),
-              SizedBox(
-                height:screenHeight*0.3,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    ProductCard(
-                      title: "Wood Frame",
-                      image: AppImage.chair3,
-                      price: "120",
-                      onTap: () {
-                             Get.toNamed("/productscreen");
-                      },
-                    ),
-                    ProductCard(
-                      title: "Yellow Armchair",
-                      image: AppImage.chair3,
-                      price: "150",
-                      onTap: () {
-                            Get.toNamed("/productscreen");
-                      },
-                    ),
-                  ],
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Browse by Categories",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
-          ),
-        ),
+                SizedBox(height: screenHeight * 0.03),
+                SizedBox(
+                  height: screenHeight * 0.3,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.categories.length,
+                    itemBuilder: (context, index) {
+                      final category = controller.categories[index];
+                      return CategoryCard(
+                        title: category.title,
+                        image: category.image,
+                        productsCount: category.productsCount,
+                        onTap: () {
+                            print("Selected category ID: ${category.id}");
+                          Get.toNamed("/search",
+                              arguments: category.id);
+                        },
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.04),
+                const Text(
+                  "Recommended for You",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                SizedBox(
+                  height: screenHeight * 0.3,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.products.length,
+                    itemBuilder: (context, index) {
+                      final product = controller.products[index];
+                      return ProductCard(
+                        title: product.title,
+                        image: product.image,
+                        price: product.price.toString(),
+                        onTap: () {
+                          Get.toNamed("/productscreen", arguments: {
+                          "id": product.id,
+                          "title":product.title,
+                          "image":product.image,
+                          "price":product.price,
+                        // "description":product.description,
+                        // "category":product.category,
+                          
+                          }
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }

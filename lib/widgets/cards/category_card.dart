@@ -36,7 +36,18 @@ class CategoryCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.asset(image, height:screenHeight*0.2),
+          Image.network( 
+          image,
+          height: screenHeight*0.24,
+  fit: BoxFit.fill,
+  loadingBuilder: (context, child, loadingProgress) {
+    if (loadingProgress == null) return child;
+    return const Center(child: CircularProgressIndicator());
+  },
+  errorBuilder: (context, error, stackTrace) {
+    return const Icon(Icons.broken_image, color: Colors.grey, size: 60);
+  },
+),
             Text(
               title,
               style: const TextStyle(fontWeight: FontWeight.bold),

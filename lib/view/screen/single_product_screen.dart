@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:model_home_app/Models/single_product_model.dart';
+import 'package:model_home_app/Models/product_model.dart';
+
 import 'package:model_home_app/constant/app_color.dart';
-import 'package:model_home_app/constant/app_image.dart';
+
 import 'package:model_home_app/widgets/button/custom_button.dart';
 
 import '../../../widgets/color_option.dart';
@@ -16,19 +17,37 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+   late ProductModel product;
   int selectedColorIndex = 0;
 
-  final product = ProductModel(
-    name: "Green Armchair",
-    category: "Chair",
-    price: 289.99,
-    description:
-        "Tieton Armchair\n\nThis armchair is an elegant and functional piece of furniture. "
-        "It is suitable for family visits and parties with friends and perfect "
-        "for relaxing in front of the TV after hard work.",
-    colors: ["#7DC579", "#000000", "#FFFFFF"], // 🔲 3 colors
-    image: AppImage.chair1,
+   @override
+  void initState() {
+    super.initState();
+
+    // Get.arguments is Map<String, dynamic>
+    final args = Get.arguments as Map<String, dynamic>;
+
+    product = ProductModel(
+    id: args['id'] ?? '',
+    title: args['title'] ?? 'No title',
+    category: args['category'] ?? 'No category',
+    price: (args['price'] ?? 0).toDouble(),
+    description: args['description'] ?? 'No description',
+    image: args['image'] ?? '',   // agar image null ho toh empty string
+    colors: List<String>.from(args['colors'] ?? []),
   );
+}
+  // final product = ProductModel(
+  //   name: "Green Armchair",
+  //   category: "Chair",
+  //   price: 289.99,
+  //   description:
+  //       "Tieton Armchair\n\nThis armchair is an elegant and functional piece of furniture. "
+  //       "It is suitable for family visits and parties with friends and perfect "
+  //       "for relaxing in front of the TV after hard work.",
+  //   colors: ["#7DC579", "#000000", "#FFFFFF"], // 🔲 3 colors
+  //   image: AppImage.chair1,
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +92,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               color:AppColor.titlecolor, fontSize: 14),
                         ),
                         Text(
-                          product.name,
+                          product.title,
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
@@ -109,7 +128,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ),
                 
-                Image.asset(
+               Image.network(
   product.image,
   height: screenHeight * 0.30,
   width: screenWidth * 0.53,   

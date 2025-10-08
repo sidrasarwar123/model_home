@@ -28,16 +28,16 @@ class _SplashScreenState extends State<SplashScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (isFirstTime) {
-      box.write("isFirstTime", false); // ek dafa onboarding dikhani ha
+      box.write("isFirstTime", false); 
       Get.offAllNamed('/onboarding');
       return;
     }
 
     if (user == null) {
-      // agar user login nahi ha
+      
       Get.offAllNamed('/welcomescreen');
     } else {
-      // agar user login ha to home screen par bhej do
+   
       Get.offAllNamed('/bottombar');
     }
   }

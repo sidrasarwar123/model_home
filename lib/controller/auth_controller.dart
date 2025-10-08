@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart'; // kIsWeb ke liye
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -127,6 +128,14 @@ class AuthController extends GetxController {
 
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
+             String uid = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance.collection('userdata').doc(uid).set({
+        'uid': uid,
+       
+        'email': emailController.text,
+        'createdAt': DateTime.now(),
+      });
+
 
         SnackbarUtil.showSuccess('Your account created successfully');
         Get.offAllNamed('/bottombar');

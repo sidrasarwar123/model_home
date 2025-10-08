@@ -38,17 +38,23 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(image, height: screenHeight*0.2),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(title,
+ Image.network( 
+          image,
+          height: screenHeight*0.24,
+  fit: BoxFit.fill,
+  loadingBuilder: (context, child, loadingProgress) {
+    if (loadingProgress == null) return child;
+    return const Center(child: CircularProgressIndicator());
+  },
+  errorBuilder: (context, error, stackTrace) {
+    return const Icon(Icons.broken_image, color: Colors.grey, size: 60);
+  },
+),
+             Text(title,
                   style: const TextStyle(fontWeight: FontWeight.bold)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text("\$$price",
+           Text("\$$price",
                   style: const TextStyle(color:Colors.grey )),
-            ),
+          
           ],
         ),
       ),
