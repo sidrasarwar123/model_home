@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:model_home_app/Models/product_model.dart';
+import 'package:model_home_app/Models/cart_model.dart';
 
 import 'package:model_home_app/constant/app_color.dart';
+import 'package:model_home_app/controller/product_category_model.dart';
 
 import 'package:model_home_app/widgets/button/custom_button.dart';
 
@@ -17,37 +18,26 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-   late ProductModel product;
+  final ProductController productController = Get.put(ProductController());
   int selectedColorIndex = 0;
+    late String title;
+  late String category;
+  late double price;
+  late String description;
+  late List<String> colors;
+  late String image;
 
-   @override
+  @override
   void initState() {
     super.initState();
-
-    // Get.arguments is Map<String, dynamic>
-    final args = Get.arguments as Map<String, dynamic>;
-
-    product = ProductModel(
-    id: args['id'] ?? '',
-    title: args['title'] ?? 'No title',
-    category: args['category'] ?? 'No category',
-    price: (args['price'] ?? 0).toDouble(),
-    description: args['description'] ?? 'No description',
-    image: args['image'] ?? '',   // agar image null ho toh empty string
-    colors: List<String>.from(args['colors'] ?? []),
-  );
-}
-  // final product = ProductModel(
-  //   name: "Green Armchair",
-  //   category: "Chair",
-  //   price: 289.99,
-  //   description:
-  //       "Tieton Armchair\n\nThis armchair is an elegant and functional piece of furniture. "
-  //       "It is suitable for family visits and parties with friends and perfect "
-  //       "for relaxing in front of the TV after hard work.",
-  //   colors: ["#7DC579", "#000000", "#FFFFFF"], // 🔲 3 colors
-  //   image: AppImage.chair1,
-  // );
+    final args = Get.arguments;
+    title = args['title'];
+    category = args['category'];
+    price = args['price'];
+    description = args['description'];
+    colors = List<String>.from(args['colors']);
+    image = args['image'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,31 +76,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          product.category.toUpperCase(),
+                        Text(category.toUpperCase(),
+                          
+        
                           style:  TextStyle(
-                              color:AppColor.titlecolor, fontSize: 14),
+                              color:AppColor.titlecolor, fontSize: 16),
                         ),
-                        Text(
-                          product.title,
+                        Text(title,
+                          // product.name,
                           style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                        SizedBox(height: screenHeight*0.03),
                         Text(
-                          "From \$${product.price}",
+                          "From \$${price.toStringAsFixed(2)}",
                           style:  TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600,),
                         ),
                        SizedBox(height: screenHeight*0.02),
                         Text(
-                        "Available Colors",
+
+                       "Available Colors",
                           style:  TextStyle(
                               color:AppColor.titlecolor, fontSize: 12),
                         ),
-                     
+                     SizedBox(height: screenHeight*0.03,),
                         Row(
-                          children: product.colors.asMap().entries.map((entry) {
+                          children: colors.asMap().entries.map((entry) {
                             int idx = entry.key;
                             String hex = entry.value;
                             return ColorOption(
@@ -128,20 +120,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ),
                 
-               Image.network(
-  product.image,
+                Image.network(
+  image,
   height: screenHeight * 0.30,
   width: screenWidth * 0.53,   
   fit: BoxFit.contain,
 )
                 ],
               ),
-
-              SizedBox(height: screenHeight*0.1),
-
+                  SizedBox(height: screenHeight*0.03),
+                           Text(title,
+                          // product.name,
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+              SizedBox(height: screenHeight*0.01),
+           
           
               Text(
-                product.description,
+                description,
                 style: const TextStyle(fontSize: 15, color: Colors.black54),
               ),
               const Spacer(),
@@ -149,12 +146,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             
               Padding(
                 padding:  EdgeInsets.only(left: screenWidth*0.05),
-                child: CustomButton(
-                  text: "ADD TO CART",
-                  onPressed: () {
-                    Get.toNamed("/cartscreen");
-                  },
-                ),
+                child: Obx(() => CustomButton(
+  text: "ADD TO CART",
+  isloading: productController.isLoading.value,
+  onPressed: () async {
+    await productController.addToCart(
+      CartItem(
+        name: title,
+        price: price,
+        image: image,
+        color: colors[selectedColorIndex],
+      ),
+    );
+    // Navigate only after loading done
+    Get.toNamed("/cartscreen");
+  },
+)),
+
               ),
             ],
           ),

@@ -70,34 +70,38 @@ class HomeScreen extends StatelessWidget {
                   "Recommended for You",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: screenHeight * 0.02),
-                SizedBox(
-                  height: screenHeight * 0.3,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: controller.products.length,
-                    itemBuilder: (context, index) {
-                      final product = controller.products[index];
-                      return ProductCard(
-                        title: product.title,
-                        image: product.image,
-                        price: product.price.toString(),
-                        onTap: () {
-                          Get.toNamed("/productscreen", arguments: {
-                          "id": product.id,
-                          "title":product.title,
-                          "image":product.image,
-                          "price":product.price,
-                        // "description":product.description,
-                        // "category":product.category,
-                          
-                          }
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
+              
+               SizedBox(
+  height: screenHeight * 0.3,
+  child: Obx(() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: controller.products.length,
+      itemBuilder: (context, index) {
+        final product = controller.products[index];
+        return ProductCard(
+          title: product.title,
+          image: product.image,
+          price: product.price.toString(),
+          onTap: () {
+            Get.toNamed(
+              "/productscreen",
+              arguments: {
+                'title': product.title,
+                'category': product.category,
+                'price': product.price,
+                'description': product.description,
+                'colors': product.colors,
+                'image': product.image,
+              },
+            );
+          },
+        );
+      },
+    );
+  }),
+),
+
               ],
             ),
           );

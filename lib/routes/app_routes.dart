@@ -10,7 +10,7 @@ import 'package:model_home_app/view/screen/checkout_screen.dart';
 import 'package:model_home_app/view/screen/order_review.dart';
 
 import 'package:model_home_app/view/screen/search_screen.dart';
-import 'package:model_home_app/view/screen/single_product_screen.dart';
+import 'package:model_home_app/view/screen/product_detail_screen.dart.dart';
 
 import 'package:model_home_app/widgets/bottom_bar_screen.dart';
 

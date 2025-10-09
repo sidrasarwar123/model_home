@@ -1,11 +1,15 @@
 class CartItem {
-  String name;
+  final String name;
+  final double price;
+  final String image;
+  final String color;
   int quantity;
-  double price;
 
   CartItem({
     required this.name,
-    required this.quantity,
     required this.price,
+    required this.image,
+    required this.color,
+    this.quantity = 1,
   });
 }

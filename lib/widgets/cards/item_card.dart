@@ -38,8 +38,9 @@ class CartItemTile extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.inventory_2_outlined,
-                    size: 28, color: Colors.blueGrey),
+                child:Image.network(item.image,)
+                //  const Icon(Icons.inventory_2_outlined,
+                //     size: 28, color: Colors.blueGrey),
               ),
               SizedBox(width: screenWidth * 0.03),
 

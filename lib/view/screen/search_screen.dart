@@ -106,7 +106,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       onTap: () {
                         Get.toNamed(
                           "/productscreen",
-                          arguments: product.id,
+                          arguments: {
+                'title': product.title,
+                'category': product.category,
+                'price': product.price,
+                'description': product.description,
+                'colors': product.colors,
+                'image': product.image,
+              },
                         );
                       },
                     );

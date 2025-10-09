@@ -4,8 +4,8 @@ class ProductModel {
   final String category;
   final double price;
   final String description;
-  final String image;
   final List<String> colors;
+  final String image;
 
   ProductModel({
     required this.id,
@@ -13,19 +13,32 @@ class ProductModel {
     required this.category,
     required this.price,
     required this.description,
-    required this.image,
     required this.colors,
+    required this.image,
   });
-
-  factory ProductModel.fromMap(Map<String, dynamic> map, String id) {
+  //isy ma ny peoduct ky lia bi use kia ha and is sy ma ny argument pass karway ha 
+  // Convert Firestore Model
+  factory ProductModel.fromMap(Map<String, dynamic> data, String id) {
     return ProductModel(
       id: id,
-      title: map['title'] ?? '',
-      category: map['category'] ?? '',
-      price: (map['price'] ?? 0).toDouble(),
-      description: map['description'] ?? '',
-      image: map['image'] ?? '',
-      colors: List<String>.from(map['colors'] ?? []),
+      title: data['title'] ?? '',
+      category: data['category'] ?? '',
+      price: (data['price'] ?? 0).toDouble(),
+      description: data['description'] ?? '',
+      colors: List<String>.from(data['colors'] ?? []),
+      image: data['image'] ?? '',
     );
+  }
+
+  // Convert Model → Map (for uploading)
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'category': category,
+      'price': price,
+      'description': description,
+      'colors': colors,
+      'image': image,
+    };
   }
 }
