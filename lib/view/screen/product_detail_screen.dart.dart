@@ -158,7 +158,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         color: colors[selectedColorIndex],
       ),
     );
-    // Navigate only after loading done
+   
     Get.toNamed("/cartscreen");
   },
 )),

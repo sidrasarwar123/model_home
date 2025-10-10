@@ -39,12 +39,10 @@ class CartItemTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child:Image.network(item.image,)
-                //  const Icon(Icons.inventory_2_outlined,
-                //     size: 28, color: Colors.blueGrey),
+               
               ),
               SizedBox(width: screenWidth * 0.03),
 
-              // Title + Quantity
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

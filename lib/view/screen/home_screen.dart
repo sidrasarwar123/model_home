@@ -93,6 +93,8 @@ class HomeScreen extends StatelessWidget {
                 'description': product.description,
                 'colors': product.colors,
                 'image': product.image,
+                
+
               },
             );
           },

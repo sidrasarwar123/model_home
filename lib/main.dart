@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:model_home_app/controller/product_category_model.dart';
 import 'package:model_home_app/firebase_options.dart';
-
-
-
-
 import 'package:model_home_app/routes/app_routes.dart';
 
 void main() async {
@@ -23,6 +20,7 @@ void main() async {
   if (isOnboardingPlayed == null) {
     box.write('isOnboardingPlayed', false);
   }
+    Get.put(ProductController(), permanent: true);
   runApp(MyApp());
 }
 

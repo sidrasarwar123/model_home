@@ -19,7 +19,7 @@ class OrderReviewPage extends StatefulWidget {
 class _OrderReviewPageState extends State<OrderReviewPage> {
   final ProductController productController=Get.put(ProductController());
   final NumberFormat _currency = NumberFormat.simpleCurrency(locale: 'en_US');
-
+bool isloading=false;
   
 
   @override
@@ -113,10 +113,17 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                         ],
                       ),
                     ),
-                    CustomButton(text: "Next", onPressed: (){
-                      Get.toNamed("/checkout");
-                    }),
-                    SizedBox(height: screenHeight*0.1,)
+                  CustomButton(
+  text: "Next",
+  isloading: isloading,
+  onPressed: () async {
+    setState(() => isloading = true); 
+    await Future.delayed(const Duration(seconds: 1)); 
+    setState(() => isloading = false); 
+    Get.toNamed("/checkout");
+  },
+),
+SizedBox(height: screenHeight * 0.1),
                    
                   ],
                 ),

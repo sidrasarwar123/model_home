@@ -5,11 +5,13 @@ import '../models/product_model.dart';
 import '../models/category_model.dart';
 
 class ProductController extends GetxController {
+   var orderItems = <Map<String, dynamic>>[].obs;
   var isLoading = false.obs;
   var products = <ProductModel>[].obs; 
   var allProducts = <ProductModel>[].obs; 
   var categories = <CategoryModel>[].obs;
     var items = <CartItem>[].obs;
+static ProductController get to => Get.find<ProductController>();
 
   /// Fetch all categories (for SearchScreen)
   Future<void> fetchCategories() async {

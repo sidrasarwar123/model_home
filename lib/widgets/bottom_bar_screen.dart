@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:model_home_app/constant/app_color.dart';
-
+import 'package:model_home_app/controller/product_category_model.dart';
 import 'package:model_home_app/view/screen/home_screen.dart';
 import 'package:model_home_app/view/screen/order_review.dart';
 import 'package:model_home_app/view/screen/search_screen.dart';
@@ -11,13 +12,14 @@ class BottombarScreen extends StatefulWidget {
 }
 
 class _BottombarScreenState extends State<BottombarScreen> {
+  final productController = Get.find<ProductController>();
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     HomeScreen(),
     SearchScreen(),
     OrderReviewPage(),
-     ProfileScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -30,7 +32,6 @@ class _BottombarScreenState extends State<BottombarScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     double navBarHeight = screenHeight * 0.08;
     double iconSize = screenWidth * 0.08;
     double fontSize = screenWidth * 0.03;
@@ -59,9 +60,65 @@ class _BottombarScreenState extends State<BottombarScreen> {
                 children: [
                   navItem(Icons.home, "Home", 0, iconSize, fontSize),
                   navItem(Icons.search, "Search", 1, iconSize, fontSize),
-                  navItem(Icons.shopping_bag, " cart", 2, iconSize, fontSize),
-                  navItem(Icons.person, "profile", 3, iconSize, fontSize),
-                
+                  //cart Icon with Blue Circle Badge
+                  Obx(() {
+                    int count = productController.items.length;
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        GestureDetector(
+                          onTap: () => _onItemTapped(2),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.shopping_bag,
+                                size: iconSize,
+                                color: _selectedIndex == 2
+                                    ? AppColor.buttoncolor
+                                    : Colors.grey,
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "Cart",
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  color: _selectedIndex == 2
+                                      ? AppColor.buttoncolor
+                                      : Colors.grey,
+                                  fontWeight: _selectedIndex == 2
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Small Blue Circle Badge
+                        if (count > 0)
+                          Positioned(
+                            right: -4,
+                            top: 2,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                count.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
+                  navItem(Icons.person, "Profile", 3, iconSize, fontSize),
                 ],
               ),
             ),
@@ -98,9 +155,6 @@ class _BottombarScreenState extends State<BottombarScreen> {
     );
   }
 }
-
-
-
 
 class ProfileScreen extends StatelessWidget {
   @override
