@@ -108,7 +108,7 @@ static ProductController get to => Get.find<ProductController>();
     }
   }
 
-  ///  Remove / Update
+ 
   void removeItem(CartItem item) => items.remove(item);
   void increaseQuantity(int index) {
     items[index].quantity++;

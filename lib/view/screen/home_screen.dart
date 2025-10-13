@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                       return CategoryCard(
                         title: category.title,
                         image: category.image,
-                        productsCount: category.productsCount,
+                        productsCount: category.productsCount.toString(),
                         onTap: () {
                             print("Selected category ID: ${category.id}");
                           Get.toNamed("/search",

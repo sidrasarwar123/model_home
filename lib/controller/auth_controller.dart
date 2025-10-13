@@ -48,34 +48,7 @@ class AuthController extends GetxController {
       signingIn = false;
     }
   }
-//   Future<void> signInWithFacebook() async {
-//   if (signingIn) return;
-//   signingIn = true;
 
-//   try {
-//     if (kIsWeb) {
-//       // Web ke liye Facebook login
-//       FacebookAuthProvider facebookProvider = FacebookAuthProvider();
-//       await _auth.signInWithPopup(facebookProvider);
-//     } else {
-//       // Mobile ke liye
-//       final LoginResult result = await FacebookAuth.instance.login();
-//       if (result.status == LoginStatus.success) {
-//         final OAuthCredential credential =
-//             FacebookAuthProvider.credential(result.accessToken!.token);
-//         await _auth.signInWithCredential(credential);
-//         Get.snackbar("Success", "Logged in with Facebook");
-//         Get.offAllNamed('/bottombar');
-//       } else {
-//         Get.snackbar("Error", result.message ?? "Facebook login failed");
-//       }
-//     }
-//   } catch (e) {
-//     Get.snackbar("Error", e.toString());
-//   } finally {
-//     signingIn = false;
-//   }
-// }
 
   Future<void> signInWithApple() async {
     if (signingIn) return;
@@ -83,7 +56,7 @@ class AuthController extends GetxController {
 
     try {
       if (kIsWeb) {
-        throw Exception("Apple Sign-In not supported on web"); // Web me Apple sign-in nahi
+        throw Exception("Apple Sign-In not supported on web"); 
       }
 
       final credential = await SignInWithApple.getAppleIDCredential(

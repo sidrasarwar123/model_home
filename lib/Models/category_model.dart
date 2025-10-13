@@ -2,7 +2,7 @@ class CategoryModel {
   final String id;
   final String title;
   final String image;
-  final String productsCount;
+  final int productsCount; 
   final String description;
   final String category;
   final List<String> colors;
@@ -22,7 +22,10 @@ class CategoryModel {
       id: id,
       title: data['title'] ?? '',
       image: data['image'] ?? '',
-      productsCount: data['productsCount'] ?? '',
+      productsCount: (data['productsCount'] ?? 0)
+          is int
+          ? data['productsCount']
+          : int.tryParse(data['productsCount'].toString()) ?? 0,
       description: data['description'] ?? '',
       category: data['category'] ?? '',
       colors: List<String>.from(data['colors'] ?? []),
@@ -33,7 +36,7 @@ class CategoryModel {
     return {
       'title': title,
       'image': image,
-      'productsCount': productsCount,
+      'productsCount': productsCount, 
       'description': description,
       'category': category,
       'colors': colors,

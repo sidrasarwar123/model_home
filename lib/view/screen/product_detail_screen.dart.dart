@@ -19,6 +19,7 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final ProductController productController = Get.put(ProductController());
+  
   int selectedColorIndex = 0;
     late String title;
   late String category;
@@ -26,6 +27,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late String description;
   late List<String> colors;
   late String image;
+   
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     description = args['description'];
     colors = List<String>.from(args['colors']);
     image = args['image'];
+  
   }
 
   @override
@@ -101,21 +104,38 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               color:AppColor.titlecolor, fontSize: 12),
                         ),
                      SizedBox(height: screenHeight*0.03,),
-                        Row(
-                          children: colors.asMap().entries.map((entry) {
-                            int idx = entry.key;
-                            String hex = entry.value;
-                            return ColorOption(
-                              color: Color(int.parse("0xFF${hex.substring(1)}")),
-                              isSelected: idx == selectedColorIndex,
-                              onTap: () {
-                                setState(() {
-                                  selectedColorIndex = idx;
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
+                      Row(
+  children: colors.asMap().entries.map((entry) {
+    int idx = entry.key;
+    String name = entry.value;
+
+    // Convert color name to actual Color
+    Color color;
+    switch (name.toLowerCase()) {
+      case 'red':
+        color = Colors.red;
+        break;
+      case 'blue':
+        color = Colors.blue;
+        break;
+      case 'brown':
+        color = Colors.brown;
+        break;
+      default:
+        color = Colors.grey; // fallback
+    }
+
+    return ColorOption(
+      color: color,
+      isSelected: idx == selectedColorIndex,
+      onTap: () {
+        setState(() {
+          selectedColorIndex = idx;
+        });
+      },
+    );
+  }).toList(),
+),
                       ],
                     ),
                   ),
@@ -152,7 +172,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   onPressed: () async {
     await productController.addToCart(
       CartItem(
-        name: title,
+        name: title,    
         price: price,
         image: image,
         color: colors[selectedColorIndex],
