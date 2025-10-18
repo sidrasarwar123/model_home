@@ -1,7 +1,8 @@
-import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/category_model.dart';
-import '../models/product_model.dart';
+import 'package:get/get.dart';
+
+import 'package:model_home_app/Models/category_model.dart';
+import 'package:model_home_app/Models/product_model.dart';
 
 class HomeController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -13,33 +14,25 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchHomeData();
-    
+    fetchCategories();
+    fetchProducts();
   }
 
-  Future<void> fetchHomeData() async {
-    try {
-      isLoading(true);
-
-      // 🔹 Fetch categories
-      final categorySnapshot = await _firestore.collection('categories').get();
-      categories.value = categorySnapshot.docs
+  void fetchCategories() {
+    _firestore.collection('categories').snapshots().listen((snapshot) {
+      categories.value = snapshot.docs
           .map((doc) => CategoryModel.fromMap(doc.data(), doc.id))
           .toList();
-
-  
-      final productSnapshot = await _firestore.collection('products').get();
-      products.value = productSnapshot.docs
-          .map((doc) => ProductModel.fromMap(doc.data(), doc.id))
-          .toList();
-    } catch (e) {
-      print("Error fetching home data: $e");
-    } finally {
-      isLoading(false);
-    }
+      isLoading.value = false;
+    });
   }
 
-  
-  
+  void fetchProducts() {
+    _firestore.collection('products').snapshots().listen((snapshot) {
+      products.value = snapshot.docs
+          .map((doc) => ProductModel.fromMap(doc.data(), doc.id))
+          .toList();
+      isLoading.value = false;
+    });
+  }
 }
-

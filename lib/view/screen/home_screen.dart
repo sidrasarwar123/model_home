@@ -91,7 +91,9 @@ class HomeScreen extends StatelessWidget {
                 'category': product.category,
                 'price': product.price,
                 'description': product.description,
-                'colors': product.colors,
+                'colors': (product.colors != null && product.colors.isNotEmpty)
+        ? product.colors
+        : ["Black", "Brown"],
                 'image': product.image,
                 
 

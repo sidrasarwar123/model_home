@@ -5,13 +5,13 @@ import '../models/product_model.dart';
 import '../models/category_model.dart';
 
 class ProductController extends GetxController {
-   var orderItems = <Map<String, dynamic>>[].obs;
   var isLoading = false.obs;
   var products = <ProductModel>[].obs; 
   var allProducts = <ProductModel>[].obs; 
   var categories = <CategoryModel>[].obs;
-    var items = <CartItem>[].obs;
-static ProductController get to => Get.find<ProductController>();
+  var items = <CartItem>[].obs;
+
+  static ProductController get to => Get.find<ProductController>();
 
   /// Fetch all categories (for SearchScreen)
   Future<void> fetchCategories() async {
@@ -75,20 +75,20 @@ static ProductController get to => Get.find<ProductController>();
     }
   }
 
-  /// 🔍 Search function (filters from backup list)
+  /// Search function
   void searchProducts(String query) {
     if (query.isEmpty) {
-      products.assignAll(allProducts); // reset
+      products.assignAll(allProducts);
     } else {
       final result = allProducts.where((product) =>
           product.title.toLowerCase().contains(query.toLowerCase()));
       products.assignAll(result);
-      print("🔎 Found ${products.length} results for '$query'");
+      print(" Found ${products.length} results for '$query'");
     }
   }
 
-
-   Future<void> addToCart(CartItem item) async {
+  ///  Add to cart
+  Future<void> addToCart(CartItem item) async {
     try {
       isLoading.value = true;
       await Future.delayed(const Duration(seconds: 2)); 
@@ -108,13 +108,16 @@ static ProductController get to => Get.find<ProductController>();
     }
   }
 
- 
+  /// Remove item
   void removeItem(CartItem item) => items.remove(item);
+
+  /// ➕ Increase quantity
   void increaseQuantity(int index) {
     items[index].quantity++;
     items.refresh();
   }
 
+  /// ➖ Decrease quantity
   void decreaseQuantity(int index) {
     if (items[index].quantity > 1) {
       items[index].quantity--;
@@ -122,6 +125,12 @@ static ProductController get to => Get.find<ProductController>();
     }
   }
 
+  ///  Total price
   double get total =>
       items.fold(0, (sum, item) => sum + item.price * item.quantity);
+
+  ///  Clear cart after checkout
+  void clearCart() {
+    items.clear();
+  }
 }

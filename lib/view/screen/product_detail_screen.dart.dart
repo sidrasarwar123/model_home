@@ -27,6 +27,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late String description;
   late List<String> colors;
   late String image;
+  final defaultColors = ["Red", "Blue", "Brown"];
    
 
   @override
@@ -122,7 +123,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         color = Colors.brown;
         break;
       default:
-        color = Colors.grey; // fallback
+        color = Colors.grey; 
     }
 
     return ColorOption(
@@ -175,7 +176,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         name: title,    
         price: price,
         image: image,
-        color: colors[selectedColorIndex],
+        color: defaultColors[selectedColorIndex],
       ),
     );
    

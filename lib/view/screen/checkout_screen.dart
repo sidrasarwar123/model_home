@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:model_home_app/Models/cart_model.dart';
 import 'package:model_home_app/controller/product_category_model.dart';
 import 'package:model_home_app/widgets/button/custom_button.dart';
 
@@ -16,7 +17,8 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final ProductController productController = Get.put(ProductController());
 
-List<Map<String, dynamic>> orderItems = ProductController.to.orderItems;
+final List<CartItem> orderItems = ProductController.to.items.toList();
+
  
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -180,56 +182,60 @@ Future<void> _submitOrder() async {
   try {
     setState(() => isLoading = true);
 
- 
-    List<Map<String, dynamic>> orderItems = ProductController.to.items
-        .map((item) => {
-              "productId": item.name ?? "",
-              "title": item.name,
-              "price": item.price,
-              "qty": item.quantity,
-            })
-        .toList();
+    // Prepare order items
+    List<Map<String, dynamic>> orderItems = ProductController.to.items.map((item) => {
+    
+      "title": item.name,
+      "price": item.price,
+      "qty": item.quantity,
+    }).toList();
 
-    await FirebaseFirestore.instance
-        .collection("orders")
-        .doc(user.uid)
-        .collection("userOrders")
-        .add({
+    // Calculate total price
+    double totalAmount = ProductController.to.total;
+
+    // Prepare order data
+    final orderData = {
+      'userId': user.uid,
       'firstName': firstNameController.text.trim(),
       'lastName': lastNameController.text.trim(),
       'email': emailController.text.trim(),
-      'streetAddress': streetController.text.trim(),
-      'zipCode': zipController.text.trim(),
       'phone': phoneController.text.trim(),
-      'state': selectedState,
-      'city': cityController.text.trim(),
-      'sameAddress': sameAddress,
-      'createAccount': createAccount,
-      'timestamp': DateTime.now(),
+      'address': "${streetController.text.trim()}, ${cityController.text.trim()}, $selectedState",
+      'zipCode': zipController.text.trim(),
+      'status': 'pending', 
+      'timestamp': FieldValue.serverTimestamp(),
+      'total': totalAmount,
       'orderItems': orderItems,
-    });
+    };
+
+    // Save in  orders collection
+    await FirebaseFirestore.instance.collection("orders").add(orderData);
 
     setState(() => isLoading = false);
 
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text("🎉 Congratulations!"),
-        content: const Text("Your order has been placed successfully."),
+        title: const Text(" Order Placed"),
+        content: const Text("Your order has been successfully placed."),
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              Get.back();
+              Get.offAllNamed("/bottombar");
+            },
             child: const Text("OK"),
           ),
         ],
       ),
     );
+
+    // Clear cart
+    ProductController.to.clearCart();
+
   } catch (e) {
     setState(() => isLoading = false);
     Get.snackbar("Error", e.toString());
   }
 }
-
-  
 }
-
